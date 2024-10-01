@@ -147,6 +147,12 @@ void UnsignedRange::AddInterval(size_t first, size_t last)
 
 void UnsignedRange::RemoveInterval(size_t first, size_t last)
 {
+	// first must be bigger than last
+	if (first > last)
+	{
+		std::swap(first, last);
+	}
+
 	std::list<std::pair<size_t, size_t>>::iterator delBegin = m_data.begin();
 	std::list<std::pair<size_t, size_t>>::iterator delEnd = m_data.begin();
 
