@@ -14,6 +14,7 @@ public:
 	void RemoveInterval(size_t first, size_t last);
 
 	bool IsInRange(size_t number);
+	size_t Size();
 
 	friend std::ostream& operator<< (std::ostream& stream, const UnsignedRange& matrix);
 

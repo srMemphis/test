@@ -75,7 +75,7 @@ void UnsignedRange::Add(size_t number)
 }
 
 void UnsignedRange::AddInterval(size_t first, size_t last)
-{	
+{
 	// first must be bigger than last
 	if (first > last)
 	{
@@ -91,7 +91,7 @@ void UnsignedRange::AddInterval(size_t first, size_t last)
 			if (last < iterator->first)
 			{
 				// insert new range to the left of current
-				m_data.insert(iterator, {first, last + 1});
+				m_data.insert(iterator, { first, last + 1 });
 				return;
 			}
 			// SECOND is inside or to the left of current range
@@ -101,7 +101,7 @@ void UnsignedRange::AddInterval(size_t first, size_t last)
 				iterator->first = first;
 
 				// if SECOND is to the right of current range
-				if (last + 1 > iterator -> second) 
+				if (last + 1 > iterator->second)
 				{
 					// expand current range to the right
 					iterator->second = last + 1;
@@ -136,7 +136,7 @@ void UnsignedRange::AddInterval(size_t first, size_t last)
 			// procede to the next range
 			continue;
 		}
-		
+
 
 	} //loop over ranges
 
@@ -153,7 +153,7 @@ void UnsignedRange::RemoveInterval(size_t first, size_t last)
 	for (auto iterator = m_data.begin(); iterator != m_data.end(); iterator++)
 	{
 		// FIRST is to the left of the current range
-		if (first < iterator->first+1)
+		if (first < iterator->first + 1)
 		{
 
 			// LAST is to the left of the current range
@@ -166,7 +166,7 @@ void UnsignedRange::RemoveInterval(size_t first, size_t last)
 			else if (last < iterator->second - 1)
 			{
 				// cut current range
-				iterator->first = last+1;
+				iterator->first = last + 1;
 
 				break;
 			}
@@ -190,7 +190,7 @@ void UnsignedRange::RemoveInterval(size_t first, size_t last)
 				iterator->second = first;
 
 				iterator++;
-				m_data.insert(iterator, {last+1, tmp});
+				m_data.insert(iterator, { last + 1, tmp });
 
 				break;
 			}
@@ -227,8 +227,25 @@ bool UnsignedRange::IsInRange(size_t number)
 	return false;
 }
 
+size_t UnsignedRange::Size()
+{
+	size_t result = 0;
+
+	for (auto iterator = m_data.begin(); iterator != m_data.end(); iterator++)
+	{
+		result += iterator->second - iterator->first;
+	}
+
+	return result;
+}
+
 void UnsignedRange::ResolveCollisions(std::list<std::pair<size_t, size_t>>::iterator start)
 {
+	if (m_data.size() < 2)
+	{
+		return;
+	}
+
 	std::list<std::pair<size_t, size_t>>::iterator delBegin = start;
 	delBegin++;
 	std::list<std::pair<size_t, size_t>>::iterator delEnd;
@@ -246,7 +263,7 @@ void UnsignedRange::ResolveCollisions(std::list<std::pair<size_t, size_t>>::iter
 		{
 			// expand start to the right
 			start->second = iterator->second;
-			
+
 			// remove iterator 
 			delEnd = iterator;
 			break;
